@@ -8,9 +8,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase/config";
 
 
-
 const Html = () => {
-  
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
   useEffect(() => {!user && navigate("/Signin")} )

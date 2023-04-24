@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/home";
 import HTML from "./pages/html";
 import Css from "./pages/css";
-import Javascript from "./pages/javascript";
+import Profile from "./pages/profile";
 // LEVEL2
 import { useContext } from "react";
 import ThemeContext from "./context/ThemeContext";
@@ -38,8 +38,8 @@ const router = createBrowserRouter([
     element: <Css />,
   },
   {
-    path: "/javascript",
-    element: <Javascript />,
+    path: "/profile",
+    element: <Profile />,
   },
 ]);
 
