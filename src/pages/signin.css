@@ -1,0 +1,57 @@
+main {
+  display: flex;
+  flex-direction: column;
+}
+
+.forgot-password {
+  background-color: yellow;
+  width: 400px;
+  height: 300px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  scale: 0;
+  transform: translateY(-100vh);
+  transition: 0.7s;
+}
+
+.show {
+  scale: 1;
+  transform: translateY(0);
+  transition: 0.9s;
+}
+
+.close .fa-xmark {
+  font-size: 2rem;
+  color: green;
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 25px;
+}
+
+.close .fa-xmark:hover {
+  color: orange;
+  transform: rotate(90deg);
+  font-size: 2.2rem;
+  transition: 0.3s;
+}
+
+.check-email {
+  font-size: 17px;
+  color: #555;
+  margin-top: 20px;
+  text-align: center;
+  line-height: 22px;
+}
+
+.show {
+  scale: 1;
+}
+
+.reset-password {
+  cursor: pointer;
+}

@@ -2,57 +2,55 @@ import Header from "../comp/header";
 import Footer from "../comp/Footer";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import { auth } from "../firebase/config";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
+import "./signin.css";
 
 const Signin = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showError, setShowError] = useState(false);
-  const [user,  loading] = useAuthState(auth);
+  const [checkEmail, setcheckEmail] = useState(false);
+  const [showForm, setshowForm] = useState("forgot-password");
+  const [user, loading] = useAuthState(auth);
 
-
-
-// he just sign up but he didn't verify his email
-
-// he verify his email => navigate to home
-
-// he sign in but he didn't verify his email
-useEffect(() => {
-  if(user) {
-    if(user.emailVerified) {
-      navigate("/")
+  useEffect(() => {
+    if (user) {
+      if (user.emailVerified) {
+        navigate("/");
+      }
     }
-  
-  }
-})
+  });
 
-if (user) {
-  if (!user.emailVerified) {
-    return(
+  if (user) {
+    if (!user.emailVerified) {
+      return (
+        <>
+          <Header />
+          <main>please check your email, we sent you a verification link</main>
+          <Footer />
+        </>
+      );
+    }
+  }
+
+  if (loading) {
+    return (
       <>
-      <Header />
-      <main>please check your email, we sent you a verification link</main>
-      <Footer />
+        <Header />
+        <main>Loading .......</main>
+        <Footer />
       </>
-    )
+    );
   }
-}
-
-
-if (loading) {
-  return (
-    <>
-      <Header />
-      <main>Loading .......</main>
-      <Footer />
-    </>
-  )
-}
 
   if (!user) {
     return (
@@ -60,10 +58,50 @@ if (loading) {
         <Helmet>
           <title>Signin</title>
         </Helmet>
-  
+
         <Header />
-  
+
         <main>
+          <form className={`forgot-password ${showForm}`}>
+            <div className="close">
+              <i
+                onClick={() => {
+                  setshowForm("forgot-password");
+                }}
+                className="fa-solid fa-xmark"
+              ></i>
+            </div>
+
+            <input required placeholder=" E-mail : " type="email" />
+
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setcheckEmail(true);
+                const auth = getAuth();
+                sendPasswordResetEmail(auth, email)
+                  .then(() => {
+                    // Password reset email sent!
+                    // ..
+                  })
+                  .catch((error) => {
+                    // const errorCode = error.code;
+                    // const errorMessage = error.message;
+                    // ..
+                  });
+              }}
+              className="reset-password"
+            >
+              Reset Password
+            </button>
+
+            {checkEmail && (
+              <p className="check-email">
+                check your email <br /> to reset your Password
+              </p>
+            )}
+          </form>
+
           <form>
             <input
               onChange={(e) => {
@@ -92,19 +130,19 @@ if (loading) {
                   .catch((error) => {
                     const errorCode = error.code;
                     setShowError(errorCode);
-  
+
                     switch (errorCode) {
                       case "auth/user-not-found":
                         setShowError("invalid email");
                         break;
-  
+
                       case "auth/invalid-password":
                         setShowError("invalid password");
                         break;
                       case "auth/wrong-password":
                         setShowError("wrong password");
                         break;
-  
+
                       default:
                         setShowError(errorCode);
                         break;
@@ -118,14 +156,22 @@ if (loading) {
               Don't hava an account <Link to="/signup"> Sign-up</Link>
             </p>
             <p>{showError}</p>
+
+            <p
+              onClick={() => {
+                setshowForm("show");
+              }}
+              className="account"
+            >
+              Forgot Password? <Link to="/signin"> Reset Password</Link>
+            </p>
           </form>
         </main>
-  
+
         <Footer />
       </>
     );
   }
-  
 };
 
 export default Signin;
