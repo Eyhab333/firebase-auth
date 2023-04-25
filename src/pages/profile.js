@@ -15,6 +15,13 @@ const Profile = () => {
     if (!user && !loading && !error) {
       navigate("/");
     }
+
+    if(user) {
+      if(!user.emailVerified) {
+        navigate("/");
+      }
+    
+    }
   });
 
   if (loading) {
@@ -37,68 +44,70 @@ const Profile = () => {
   }
 
   if (user) {
-    return (
-      <>
-        <Helmet>
-          <title>Profile Page</title>
-          <meta name="description" content="profile page" />
-          <style type="text/css">{`
-        .Light span {
-          color: black;
-        }
-        main {
-          width: 40%;
-          margin: auto;
-        }
-    `}</style>
-        </Helmet>
-        <Header />
+    if (user.emailVerified) {
+      return (
+        <>
+          <Helmet>
+            <title>Profile Page</title>
+            <meta name="description" content="profile page" />
+            <style type="text/css">{`
+          .Light span {
+            color: black;
+          }
+          main {
+            width: 40%;
+            margin: auto;
+          }
+      `}</style>
+          </Helmet>
+          <Header />
 
-        <main
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "flex-start",
-          }}
-        >
-          <h6 style={{ color: "cyan" }}>
-            <span>your email is:</span> {user.email}
-          </h6>{" "}
-          <br></br>
-          <h6 style={{ color: "cyan" }}>
-            <span>acount created at:</span>
-            {user.metadata.creationTime}
-          </h6>{" "}
-          <br></br>
-          <h6 style={{ color: "black" }}>
-            <span>last sign in at:</span>{" "}
-            <Moment fromNow date={user.metadata.lastSignInTime} />
-          </h6>{" "}
-          <br></br>
-          <button
+          <main
             style={{
-              color: "black",
-              backgroundColor: "red",
-              border: "1px solid black",
-              padding: "1rem",
-              margin: "1rem",
-              borderRadius: "1rem",
-              cursor: "pointer",
-              width: "100%",
-            }}
-            onClick={() => {
-              user.delete();
-              navigate("/Signin");
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "flex-start",
             }}
           >
-            delete account
-          </button>
-        </main>
+            <h6 style={{ color: "cyan" }}>
+              <span>your email is:</span> {user.email}
+            </h6>{" "}
+            <br></br>
+            <h6 style={{ color: "cyan" }}>
+              <span>acount created at:</span>
+              {user.metadata.creationTime}
+            </h6>{" "}
+            <br></br>
+            <h6 style={{ color: "black" }}>
+              <span>last sign in at:</span>{" "}
+              <Moment fromNow date={user.metadata.lastSignInTime} />
+            </h6>{" "}
+            <br></br>
+            <button
+              style={{
+                color: "black",
+                backgroundColor: "red",
+                border: "1px solid black",
+                padding: "1rem",
+                margin: "1rem",
+                borderRadius: "1rem",
+                cursor: "pointer",
+                width: "100%",
+              }}
+              onClick={() => {
+                user.delete();
+                navigate("/Signin");
+              }}
+            >
+              delete account
+            </button>
+          </main>
 
-        <Footer />
-      </>
-    );
+          <Footer />
+        </>
+      );
+    }
   }
 };
 

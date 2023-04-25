@@ -2,7 +2,11 @@ import Header from "../comp/header";
 import Footer from "../comp/Footer";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  sendEmailVerification,
+} from "firebase/auth";
 import { auth } from "../firebase/config";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -52,6 +56,10 @@ const Signup = () => {
               e.preventDefault();
               createUserWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
+                  sendEmailVerification(auth.currentUser).then(() => {
+                    // Email verification sent!
+                    // ...
+                  });
                   // Signed in
                   updateProfile(auth.currentUser, {
                     displayName: name,
