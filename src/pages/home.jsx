@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet-async";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase/config";
 import {  sendEmailVerification } from "firebase/auth";
+import ReactLoading from 'react-loading';
 
 const Home = () => {
   const [user, loading] = useAuthState(auth);
@@ -13,7 +14,7 @@ const Home = () => {
     return (
       <>
         <Header />
-        <main>Loading .......</main>
+        <main><ReactLoading type={'spinningBubbles'} color={'green'} height={167} width={75} /></main>
         <Footer />
       </>
     );
@@ -79,7 +80,7 @@ const Home = () => {
               }}
             >
               welcome {user.displayName} <span>🧡</span> <br />
-              Please verify your email to continue...
+              Please verify your email then refresh the page...
               <button
           style={{backgroundColor:"cyan",color:"white",borderRadius:"10px",padding:"10px",marginTop:"10px",cursor:"pointer"}}
             onClick={() => {
